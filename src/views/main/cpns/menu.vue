@@ -15,7 +15,7 @@
 <script setup>
 import { ref } from 'vue';
 import router from '@/router';
-import { homeMenu } from '@/local-data/home-menu';
+import { homeMenu } from '@/local-data/home';
 
 
 let currentIndexRef = ref(0);

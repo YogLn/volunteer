@@ -40,9 +40,19 @@ const routes = [
     ]
   },
   {
-    path: '/register',
-    name: 'Register',
+    path: '/user/register',
+    name: 'UserRegister',
     component: () => import(/* webpackChunkName: "about" */ '../views/register/user-register.vue')
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "about" */ '../views/login')
+  },
+  {
+    path: '/team/register',
+    name: 'TeamRegister',
+    component: () => import(/* webpackChunkName: "about" */ '../views/register/team-register.vue')
   },
 ]
 

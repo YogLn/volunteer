@@ -2,10 +2,10 @@
 	<div class="container">
 		<div class="wrapper wrap-v2">
 			<div class="left">
-				<span>亲，请登录</span>
-				<span @click="router.push('/register')">志愿者注册</span>
+				<span  @click="router.push('/login')">亲，请登录</span>
+				<span @click="router.push('/user/register')">志愿者注册</span>
 				<i>/</i>
-				<span>志愿团体注册</span>
+				<span @click="router.push('/team/register')">志愿团体注册</span>
 			</div>
 			<div class="right">
 				<span>发起项目</span>
@@ -70,10 +70,13 @@ import router from '@/router';
 			}
 			.el-dropdown {
 				height: 32px;
-				line-height:32px;
+				line-height: 32px;
 				font-size: 12px;
 				&:hover {
 					color: #f00000;
+				}
+				.el-tooltip__trigger {
+					font-size: 12px;
 				}
 			}
 		}
