@@ -8,7 +8,7 @@
 					<el-input v-model="useRegisterForm.account" />
 				</el-form-item>
 				<el-form-item label="密码" prop="password">
-					<el-input v-model="useRegisterForm.password" />
+					<el-input v-model="useRegisterForm.password" type="password" show-password />
 				</el-form-item>
 				<el-form-item label="用户名" prop="username">
 					<el-input v-model="useRegisterForm.username" />
@@ -25,11 +25,11 @@
 				<el-form-item label="生日" prop="birthday">
 					<el-date-picker v-model="useRegisterForm.birthday" type="date" placeholder="选择生日" />
 				</el-form-item>
-				<el-form-item label="服务区域" prop="serve_area">
-					<el-cascader :options="provinces" v-model="useRegisterForm.serve_area" clearable />
+				<el-form-item label="服务区域" prop="serveArea">
+					<el-cascader :options="provinces" v-model="useRegisterForm.serveArea" clearable />
 				</el-form-item>
-				<el-form-item label="服务类型" prop="serve_type">
-					<el-checkbox-group v-model="useRegisterForm.serve_type" v-for="item in serveType">
+				<el-form-item label="服务类型" prop="serveType">
+					<el-checkbox-group v-model="useRegisterForm.serveType" v-for="item in serveType">
 						<el-checkbox :label="item" />
 					</el-checkbox-group>
 				</el-form-item>
@@ -47,9 +47,12 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
-import { checkMobile, checkIdentity } from '@/utils/validate';
+import { ElMessage } from 'element-plus'
+import { formatUtcString } from '@/utils/format';
 import { provinces } from '@/local-data/provinces';
-import { serveType } from '@/local-data/user-register';
+import { serveType, rules } from '@/local-data/user-register';
+import { userRegisterRequest } from '@/services/register'
+
 const useRegisterFormRef = ref(null)
 const useRegisterForm = reactive({
 	username: '',
@@ -58,33 +61,27 @@ const useRegisterForm = reactive({
 	identity: '',
 	sex: '',
 	birthday: '',
-	serve_area: '',
-	serve_type: [],
+	serveArea: [],
+	serveType: [],
 	school: ''
 })
 
-const rules = reactive({
-	username: [{ required: true, message: '请输入用户名~', trigger: 'blur' }],
-	account: [
-		{ required: true, message: '请输入手机号~', trigger: 'blur' },
-		{ validator: checkMobile, trigger: 'blur' }
-	],
-	password: [
-		{ required: true, message: '请输入密码~', trigger: 'blur' },
-		{ min: 6, message: '密码不得少于6位', trigger: 'blur' }
-	],
-	serve_area: [{ required: true, message: '请选择服务区域~', trigger: 'blur' }],
-	identity: [{ required: true, message: '请输入合法身份证号~', trigger: 'blur' },
-	{ validator: checkIdentity, trigger: 'blur' }],
-	serve_type: [{ required: true, message: '请选择服务类型~', trigger: 'blur' }]
-})
+
 
 // 提交
 const submitForm = async (formEl) => {
 	if (!formEl) return
-	await formEl.validate((valid, fields) => {
+	await formEl.validate(async (valid, fields) => {
 		if (valid) {
-			console.log(useRegisterForm);
+			useRegisterForm.birthday = formatUtcString(useRegisterForm.birthday)
+			const res = await userRegisterRequest(useRegisterForm)
+			if (res.code == 200) {
+				ElMessage({
+					message: '注册成功~',
+					type: 'success'
+				})
+				useRegisterFormRef.value.resetFields()
+			}
 		} else {
 			console.log('error submit!', fields)
 		}
@@ -100,14 +97,15 @@ const resetForm = (formEl) => {
 
 <style lang="less" scoped>
 .container {
-	padding: 0.625rem 18.75rem;
-	height: 100%;
-	background-color: #f5f5f5;
+	margin-top: 10px;
+
 	.el-card {
 		height: 100%;
+
 		h2 {
 			text-align: center;
 		}
+
 		.el-form {
 			width: 60%;
 			margin: 1.875rem auto;

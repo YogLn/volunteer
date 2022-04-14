@@ -44,7 +44,7 @@ export const provinces = [
     ]
   },
   {
-    value: '13',
+    value: '河北省',
     label: '河北省',
     children: [
       { value: '石家庄市', label: '石家庄市' },

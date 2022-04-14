@@ -1,0 +1,128 @@
+<template>
+	<div class="container">
+		<div class="header">{{ currentProject?.name }}</div>
+		<div class="center">
+			<div class="image">
+				<img v-if="currentProject.logo" :src="currentProject.logo" alt="">
+				<img v-else src="../../assets/img/noimg_opp.jpg" alt="">
+			</div>
+			<div class="info">
+				<div class="address">项目地点：<span>{{ currentProject?.address }}</span></div>
+				<div class="address">项目描述：<span>{{ currentProject?.desc }}</span></div>
+				<div class="time">开始时间：<span>{{ currentProject?.startDatetime }}</span></div>
+				<div class="time">结束时间：<span>{{ currentProject?.endDatetime }}</span></div>
+				<div class="time">发布日期：<span>{{ currentProject?.createDate }}</span></div>
+				<div class="address">持续时间：<span>{{ currentProject?.length }}天</span></div>
+				<div class="address">服务类别：<span>{{ currentProject?.type?.join(', ') }}</span></div>
+				<div class="address">活动状态：
+					<template v-if="status === 0">
+						<el-tag type="warning">审核中</el-tag>
+					</template>
+					<template v-else-if="status === 1">
+						<el-tag type="success">通过</el-tag>
+					</template>
+					<template v-else>
+						<el-tag type="danger">未通过</el-tag>
+					</template>
+				</div>
+				<div class="btn">
+					<el-button type="primary" @click="handleJoin()">我要报名</el-button>
+					<report />
+				</div>
+			</div>
+		</div>
+
+	</div>
+</template>
+
+<script setup>
+import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { useStore } from "vuex"
+import { ElNotification } from 'element-plus'
+import Report from '@/components/report/report.vue'
+import { joinActivityReq, getActivityInfoReq } from '@/services/project'
+
+const route = useRoute()
+const store = useStore()
+
+const status = ref('')
+const { id: activityId } = route.params
+store.dispatch('project/getCurrentProjectAction', activityId)
+
+const currentProject = computed(() => store.state.project.currentProject)
+const { id: userId } = computed(() => store.state.login.userInfo).value
+
+const handleJoin = async () => {
+	const res = await joinActivityReq({ activityId, userId })
+	if (res.code === 200) {
+		ElNotification({
+			title: '报名成功',
+			message: '等待审核~',
+			type: 'success',
+		})
+	}
+}
+
+const getStatus = async () => {
+	const { data } = await getActivityInfoReq(activityId)
+	status.value = data.enrollStatus
+}
+getStatus()
+
+</script>
+
+<style lang="less" scoped>
+.container {
+	margin-top: 10px;
+
+	.header {
+		text-align: center;
+		border: 1px solid #ccc;
+		font-size: 18px;
+		padding: 8px 0;
+		font-weight: bold;
+	}
+
+	.center {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		border: 1px solid #ccc;
+		margin-top: 20px;
+
+		.image {
+			width: 300px;
+			height: 330px;
+
+			img {
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		.info {
+			div {
+				margin: 12px 0;
+				color: #666;
+
+				span {
+					color: #000;
+				}
+			}
+
+			.time {
+				span {
+					color: #139208;
+				}
+			}
+
+			.btn {
+				display: flex;
+				align-items: center;
+				justify-content: space-around;
+			}
+		}
+	}
+}
+</style>

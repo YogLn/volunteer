@@ -5,7 +5,7 @@
 				<div
 					class="nav-item"
 					:class="index === currentIndexRef ? 'active' : ''"
-					@click="handleNavClick(item ,index)"
+					@click="handleNavClick(item, index)"
 				>{{ item.title }}</div>
 			</template>
 		</div>
@@ -16,10 +16,12 @@
 import { ref } from 'vue';
 import router from '@/router';
 import { homeMenu } from '@/local-data/home';
+import emitter from '@/utils/eventBus'
 
+emitter.on('changeIndex', index => currentIndexRef.value = index)
 
 let currentIndexRef = ref(0);
-const handleNavClick = ({path}, index) => {
+const handleNavClick = ({ path }, index) => {
 	router.push(path)
 	currentIndexRef.value = index
 }
