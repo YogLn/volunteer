@@ -1,8 +1,8 @@
 export const tableContentConfig = {
   propList: [
     { prop: 'name', label: '项目名称', minWidth: '130' },
-    { prop: 'address', label: '项目地点' },
-    { prop: 'type', label: '项目类型', minWidth: '150', slotName: 'type' },
+    { prop: 'address', label: '项目地点', minWidth: '150' },
+    { prop: 'type', label: '项目类型', minWidth: '250', slotName: 'type' },
     { prop: 'status', label: '状态', minWidth: '100', slotName: 'status' },
     { label: '操作', minWidth: '140', slotName: 'handler' }
   ]

@@ -25,7 +25,7 @@
 					<el-button type="primary" @click="submitForm()">登录</el-button>
 				</div>
 			</el-form>
-			<div class="tip" @click="router.push('/user/register')">没有账号？立即注册 成为志愿者</div>
+			<div class="tip" @click="router.push('/register/user')">没有账号？立即注册 成为志愿者</div>
 		</div>
 	</div>
 </template>
@@ -54,7 +54,6 @@ const rules = {
 };
 const submitForm = () => {
 	store.dispatch('login/loginAction', loginForm)
-
 }
 </script>
 

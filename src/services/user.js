@@ -46,6 +46,14 @@ export function outActivityReq(enrollId) {
   })
 }
 
+// 删除活动
+export function deleteActivityReq(activityId) {
+  return request({
+    url: `/activity/delete/${activityId}`,
+    method: 'DELETE'
+  })
+}
+
 export function getMyTeamListReq() {
   return request({
     url: '/team/myteam'
@@ -69,5 +77,12 @@ export function getMyReportReq() {
 export function getMyServeReq() {
   return request({
     url: `/user/myserve`
+  })
+}
+
+// 我的团项目
+export function getMyCreateProjectListReq() {
+  return request({
+    url: `/activity/mylist`
   })
 }

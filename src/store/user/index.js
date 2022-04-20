@@ -4,7 +4,8 @@ import {
   getMyActivityListRequest,
   getMyTeamListReq,
   getMyReportReq,
-  getMyServeReq
+  getMyServeReq,
+  getMyCreateProjectListReq
 } from '@/services/user'
 
 const userModel = {
@@ -16,7 +17,8 @@ const userModel = {
       myActivity: [],
       myCreate: [],
       myReport: [],
-      serveList: []
+      serveList: [],
+      myCreateProList: []
     }
   },
   getters: {},
@@ -38,6 +40,9 @@ const userModel = {
     },
     changeMyServeList(state, serveList) {
       state.serveList = serveList
+    },
+    changeMyServeListAction(state, myCreateProList) {
+      state.myCreateProList = myCreateProList
     }
   },
   actions: {
@@ -50,8 +55,10 @@ const userModel = {
       commit('changeMyTeam', data)
     },
     async getMyActivityListAction({ commit }) {
-      const { data } = await getMyActivityListRequest()
-      commit('changeMyActivity', data)
+      const { data: data1 } = await getMyActivityListRequest()
+      const { data: data2 } = await getMyCreateProjectListReq()
+      commit('changeMyActivity', data1)
+      commit('changeMyServeListAction', data2)
     },
     async getMyTeamAction({ commit }) {
       const { data } = await getMyTeamListReq()

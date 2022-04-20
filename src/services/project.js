@@ -42,3 +42,11 @@ export function getActivityInfoReq(enrollId) {
     url: `/enroll/get/${enrollId}`
   })
 }
+
+export function getActivityFilterReq(data) {
+  return request({
+    url: `/activity/filter`,
+    method: 'POST',
+    data
+  })
+}

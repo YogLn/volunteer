@@ -1,5 +1,6 @@
 <template>
 	<div class="container">
+		<tab-option />
 		<div class="team-list">
 			<template v-for="item in teamList">
 				<team-box :content="item" @click="handleTeamClick(item)"></team-box>
@@ -13,6 +14,7 @@ import { computed } from 'vue';
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import TeamBox from './cpns/team-box'
+import TabOption from '@/components/option/tab-option';
 
 const store = useStore();
 const router = useRouter();

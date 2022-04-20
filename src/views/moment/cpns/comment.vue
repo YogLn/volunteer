@@ -38,6 +38,14 @@ const commentValue = ref('')
 const { id: userId } = computed(() => store.state.login.userInfo).value
 
 const handleReplay = async () => {
+	const token = window.localStorage.getItem('token')
+	if (!token) {
+		return ElMessage({
+			message: '您还没有登录~',
+			type: 'info'
+		})
+	}
+	if (!commentValue.value) return
 	const { code } = await addComment({
 		comment: commentValue.value,
 		postId: parseInt(postId),
@@ -49,7 +57,6 @@ const handleReplay = async () => {
 		emit('getCommentList')
 		show.value = false
 	}
-
 }
 </script>
 

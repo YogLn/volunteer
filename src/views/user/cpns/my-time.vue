@@ -1,5 +1,6 @@
 <template>
-	<div id="myEcharts" :style="{ width: '400px', height: '300px' }"></div>
+	<div id="myEcharts" :style="{ width: '400px', height: '300px' }" v-if="serveTime.length"></div>
+	<div v-else>您还没有服务时长，快去参加项目吧~</div>
 </template>
 
 <script setup>
@@ -45,7 +46,7 @@ onMounted(() => {
 				}
 			]
 		});
-	}, 2000)
+	}, 2500)
 });
 onUnmounted(() => {
 	echarts.dispose();

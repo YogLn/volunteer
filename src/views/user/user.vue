@@ -68,6 +68,7 @@ const onRoutes = computed(() => {
 
 	.content {
 		margin-left: 30px;
+		width: 70%;
 	}
 }
 </style>

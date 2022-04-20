@@ -1,6 +1,6 @@
 <template>
 	<div class="mytable">
-		<el-table :data="listData" border style="width: 100%">
+		<el-table :data="listData" border style="width: 900px">
 			<el-table-column label="#" type="index" align="center" width="80"></el-table-column>
 			<template v-for="propItem in propList" :key="propItem.prop">
 				<el-table-column v-bind="propItem" align="center" show-overflow-tooltip>
@@ -70,6 +70,18 @@ export default {
 
 	.el-pagination {
 		text-align: right;
+	}
+
+	.el-table {
+		overflow-x: scroll;
+	}
+
+	/deep/ .el-table--scrollable-x .el-table__body-wrapper {
+		overflow: auto !important;
+	}
+
+	/deep/.el-table__fixed-right-patch {
+		background-color: #f5f7fa !important;
 	}
 }
 </style>

@@ -15,10 +15,10 @@
 				<div class="address">持续时间：<span>{{ currentProject?.length }}天</span></div>
 				<div class="address">服务类别：<span>{{ currentProject?.type?.join(', ') }}</span></div>
 				<div class="address">活动状态：
-					<template v-if="status === 0">
+					<template v-if="currentProject.status === 0">
 						<el-tag type="warning">审核中</el-tag>
 					</template>
-					<template v-else-if="status === 1">
+					<template v-else-if="currentProject.status === 1">
 						<el-tag type="success">通过</el-tag>
 					</template>
 					<template v-else>
@@ -31,22 +31,20 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from "vuex"
-import { ElNotification } from 'element-plus'
+import { ElNotification, ElMessage } from 'element-plus'
 import Report from '@/components/report/report.vue'
-import { joinActivityReq, getActivityInfoReq } from '@/services/project'
+import { joinActivityReq } from '@/services/project'
 
 const route = useRoute()
 const store = useStore()
 
-const status = ref('')
 const { id: activityId } = route.params
 store.dispatch('project/getCurrentProjectAction', activityId)
 
@@ -54,6 +52,13 @@ const currentProject = computed(() => store.state.project.currentProject)
 const { id: userId } = computed(() => store.state.login.userInfo).value
 
 const handleJoin = async () => {
+	const token = window.localStorage.getItem('token')
+	if (!token) {
+		return ElMessage({
+			message: '您还没有登录~',
+			type: 'info'
+		})
+	}
 	const res = await joinActivityReq({ activityId, userId })
 	if (res.code === 200) {
 		ElNotification({
@@ -61,14 +66,14 @@ const handleJoin = async () => {
 			message: '等待审核~',
 			type: 'success',
 		})
+	} else {
+		ElNotification({
+			title: '重复报名',
+			message: '您已经报名过了~',
+			type: 'info',
+		})
 	}
 }
-
-const getStatus = async () => {
-	const { data } = await getActivityInfoReq(activityId)
-	status.value = data.enrollStatus
-}
-getStatus()
 
 </script>
 
@@ -90,6 +95,7 @@ getStatus()
 		align-items: center;
 		border: 1px solid #ccc;
 		margin-top: 20px;
+		padding: 20px 0;
 
 		.image {
 			width: 300px;
@@ -98,6 +104,7 @@ getStatus()
 			img {
 				width: 100%;
 				height: 100%;
+				object-fit: cover;
 			}
 		}
 

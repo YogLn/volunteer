@@ -2,7 +2,8 @@
 	<div class="container">
 		<el-tabs v-model="activeName">
 			<el-tab-pane label="我加入的团体" name="first">
-				<my-table :listData="myTeam" :="TeamTableContentConfig" :isShow="false">
+				<div v-if="!myTeam.length">您还没有加入团体~</div>
+				<my-table v-else :listData="myTeam" :="TeamTableContentConfig" :isShow="false">
 					<template #serveArea="scope">
 						{{ scope.row.serveArea.join(' ') }}
 					</template>
@@ -16,7 +17,8 @@
 				</my-table>
 			</el-tab-pane>
 			<el-tab-pane label="我创建的团体" name="second">
-				<my-table :listData="myCreate" :="TeamTableContentConfig" :isShow="false">
+				<div v-if="!myCreate.length">您还没有创建团体~</div>
+				<my-table v-else :listData="myCreate" :="TeamTableContentConfig" :isShow="false">
 					<template #account="scope">
 						{{ account }}
 					</template>

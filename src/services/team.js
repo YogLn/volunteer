@@ -37,3 +37,11 @@ export function getTeamMemberNumReq(teamId) {
     }
   })
 }
+
+export function teamFilterReq(data) {
+  return request({
+    url: `/team/filter`,
+    method: 'POST',
+    data
+  })
+}

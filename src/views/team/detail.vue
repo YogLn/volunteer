@@ -10,7 +10,7 @@
 			<div class="serveType">服务类型：<span>{{ currentTeam?.serveType?.join(', ') }}</span></div>
 			<div class="serveType">加入方式：<span>验证信息加入（需审核申请）</span></div>
 			<div class="username">团队联系人：<span>{{ currentTeam?.userVo?.username }}</span></div>
-			<div class="username">团队联系人：<span>{{ teamNum }}</span> 人</div>
+			<div class="username">团队人数：<span>{{ teamNum }}</span> 人</div>
 			<div class="account">联系电话：<span>{{ currentTeam?.userVo?.account }}</span></div>
 			<div class="area">创建时间：<span>{{
 				currentTeam.communityCreatedate ?
@@ -27,7 +27,7 @@
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router'
 import { useStore } from "vuex"
-import { ElNotification } from 'element-plus'
+import { ElNotification, ElMessage } from 'element-plus'
 import { joinTeamReq, getTeamMemberNumReq } from '@/services/team'
 import Report from '@/components/report/report.vue'
 
@@ -41,14 +41,26 @@ store.dispatch('team/getTeamDetailAction', teamId)
 const currentTeam = computed(() => store.state.team.currentTeam)
 const { id: userId } = computed(() => store.state.login.userInfo).value
 
-
 const handleJoin = async () => {
+	const token = window.localStorage.getItem('token')
+	if (!token) {
+		return ElMessage({
+			message: '您还没有登录~',
+			type: 'info'
+		})
+	}
 	const res = await joinTeamReq({ userId, teamId: parseInt(teamId) })
 	if (res.code === 200) {
 		ElNotification({
 			title: '已发送请求',
 			message: '请等待负责人审核~',
 			type: 'success',
+		})
+	} else {
+		ElNotification({
+			title: '重复报名',
+			message: '您已经报名过了~',
+			type: 'info',
 		})
 	}
 }
@@ -68,12 +80,16 @@ getTeamMemberNum()
 	border: 1px solid #ccc;
 	margin-top: 10px;
 
+
 	.image {
 		width: 300px;
 		height: 370px;
+		padding: 20px 0;
 
 		img {
 			width: 100%;
+			height: 100%;
+			object-fit: cover;
 		}
 	}
 

@@ -56,6 +56,14 @@ const content = computed(() => currentMoment.value?.content?.split('\n'))
 const { id: userId } = computed(() => store.state.login.userInfo).value
 
 const handleCommentClick = async () => {
+	const token = window.localStorage.getItem('token')
+	if (!token) {
+		return ElMessage({
+			message: '您还没有登录~',
+			type: 'info'
+		})
+	}
+	if (!commentValue.value) return
 	const res = await addComment({
 		userId,
 		postId,

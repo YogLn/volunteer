@@ -1,7 +1,8 @@
 import {
   getActivityListReq,
   getActivityDetailReq,
-  searchActivityReq
+  searchActivityReq,
+  getActivityFilterReq
 } from '@/services/project'
 
 const projectModel = {
@@ -32,6 +33,10 @@ const projectModel = {
     },
     async searchAction({ commit }, payload) {
       const { data } = await searchActivityReq(payload)
+      commit('changeProjectList', data)
+    },
+    async activityFilterAction({ commit }, payload) {
+      const { data } = await getActivityFilterReq(payload)
       commit('changeProjectList', data)
     }
   }

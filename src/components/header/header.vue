@@ -20,7 +20,7 @@
 				</div>
 			</template>
 			<div class="right">
-				<span @click="handleLogin('/newActivity')">发起项目</span>
+				<span v-if="usernameRef" @click="handleLogin('/newActivity')">发起项目</span>
 				<span>
 					<el-dropdown>
 						<span class="el-dropdown-link">
@@ -55,21 +55,23 @@ import emitter from '@/utils/eventBus'
 const store = useStore()
 const usernameRef = ref(true)
 
+
+
 watchEffect(() => {
 	usernameRef.value = store?.state?.login?.userInfo?.username
 })
-
+// 登录
 const handleLogin = (path) => {
 	setTimeout(() => router.push(path))
 	emitter.emit('changeIndex', -1)
 }
-
+// 退出
 const handleLoginOut = () => {
 	window.localStorage.clear()
 	usernameRef.value = null
 	router.push('/home')
 }
-
+// 页面跳转
 const handleUser = () => {
 	router.push('/user')
 	emitter.emit('changeIndex', -1)
@@ -87,7 +89,7 @@ const verifyLogin = () => {
 	}
 	return true
 }
-
+// 进入个人中心页面
 const handleMyPage = (path) => {
 	if (verifyLogin()) router.push(path)
 	emitter.emit('changeIndex', -1)

@@ -4,7 +4,6 @@
 		<div class="info">
 			<div class="time">日期：{{ $filter.formatTime(currentMoment.createDate) }}</div>
 			<div class="sources">来源：{{ currentMoment.source }}</div>
-
 		</div>
 		<div class="content" v-for="item in content">
 			<p>{{ item }}</p>

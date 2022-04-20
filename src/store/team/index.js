@@ -1,7 +1,8 @@
 import {
   getTeamListReq,
   getTeamDetailReq,
-  searchTeamReq
+  searchTeamReq,
+  teamFilterReq
 } from '@/services/team'
 
 const articleModel = {
@@ -34,6 +35,11 @@ const articleModel = {
 
     async searchTeamReqAction({ commit }, payload) {
       const { data } = await searchTeamReq(payload)
+      commit('changeTeamList', data)
+    },
+
+    async teamFilterAction({ commit }, payload) {
+      const { data } = await teamFilterReq(payload)
       commit('changeTeamList', data)
     }
   }

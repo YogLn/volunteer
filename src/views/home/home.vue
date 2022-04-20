@@ -29,6 +29,7 @@ import { carouselList } from '@/local-data/home'
 .container {
 	.banner {
 		display: flex;
+		padding: 0 100px;
 
 		.el-carousel {
 			width: 31.25rem;
